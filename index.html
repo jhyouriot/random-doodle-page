@@ -154,7 +154,32 @@
       user-select: none;
       pointer-events: none;
     }
+#hammer {
+  position: fixed;
+  width: 180px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-40deg) scale(0.4);
+  transition: transform 0.18s ease-out, opacity 0.12s;
+}
 
+#hammer.active {
+  opacity: 1;
+}
+
+.hit-shake {
+  animation: hitShake 0.28s;
+}
+
+@keyframes hitShake {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  20% { transform: translate(-8px, 3px) rotate(-2deg); }
+  40% { transform: translate(7px, -2px) rotate(2deg); }
+  60% { transform: translate(-6px, 2px) rotate(-1deg); }
+  80% { transform: translate(4px, -1px) rotate(1deg); }
+  100% { transform: translate(0px, 0px) rotate(0deg); }
+}
     .doodle {
       position: absolute;
       width: 26%;
@@ -314,6 +339,7 @@
           <div class="button-row">
             <button class="penalty-button a" onclick="addRandomDoodle('portraitA')">독희 벌칙</button>
           </div>
+          <img id="hammer" src="./images/hammer.png" alt="뿅망치" />
         </section>
 
         <section class="player">
@@ -359,27 +385,66 @@
       return Math.random() * (max - min) + min;
     }
 
-    function addRandomDoodle(targetId) {
-      const target = document.getElementById(targetId);
-      const doodle = document.createElement("img");
+  async function addRandomDoodle(targetId) {
+  const target = document.getElementById(targetId);
+  const hammer = document.getElementById("hammer");
 
-      const randomImage = getRandomItem(doodleImages);
-      const randomLeft = randomBetween(2, 74);
-      const randomTop = randomBetween(2, 74);
-      const randomRotate = randomBetween(-30, 30);
-      const randomSize = randomBetween(17, 34);
+  const rect = target.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
 
-      doodle.src = randomImage;
-      doodle.alt = "랜덤 낙서";
-      doodle.className = "doodle";
-      doodle.style.left = `${randomLeft}%`;
-      doodle.style.top = `${randomTop}%`;
-      doodle.style.width = `${randomSize}%`;
-      doodle.style.setProperty("--rotate", `${randomRotate}deg`);
-      doodle.style.transform = `rotate(${randomRotate}deg)`;
+  hammer.style.left = `${centerX + 160}px`;
+  hammer.style.top = `${centerY - 160}px`;
 
-      target.appendChild(doodle);
-    }
+  hammer.classList.add("active");
+
+  hammer.style.transform =
+    `translate(-50%, -50%) rotate(-45deg) scale(0.5)`;
+
+  await wait(50);
+
+  hammer.style.transform =
+    `translate(-50%, -50%) rotate(18deg) scale(1.1)`;
+
+  target.classList.add("hit-shake");
+
+  setTimeout(() => {
+    target.classList.remove("hit-shake");
+  }, 300);
+
+  createDoodle(target);
+
+  setTimeout(() => {
+    hammer.classList.remove("active");
+  }, 220);
+}
+
+function createDoodle(target) {
+  const doodle = document.createElement("img");
+
+  const randomImage = getRandomItem(doodleImages);
+  const randomLeft = randomBetween(2, 74);
+  const randomTop = randomBetween(2, 74);
+  const randomRotate = randomBetween(-30, 30);
+  const randomSize = randomBetween(17, 34);
+
+  doodle.src = randomImage;
+  doodle.alt = "랜덤 낙서";
+  doodle.className = "doodle";
+
+  doodle.style.left = `${randomLeft}%`;
+  doodle.style.top = `${randomTop}%`;
+  doodle.style.width = `${randomSize}%`;
+
+  doodle.style.setProperty("--rotate", `${randomRotate}deg`);
+  doodle.style.transform = `rotate(${randomRotate}deg)`;
+
+  target.appendChild(doodle);
+}
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
     function clearDoodles(targetId) {
       const target = document.getElementById(targetId);
@@ -390,6 +455,7 @@
       clearDoodles("portraitA");
       clearDoodles("portraitB");
     }
+    
   </script>
 </body>
 </html>
