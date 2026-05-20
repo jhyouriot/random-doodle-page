@@ -1,9 +1,395 @@
-random-doodle-page/
-├─ index.html
-└─ images/
-   ├─ background.jpg
-   ├─ portrait-a.png
-   ├─ portrait-b.png
-   ├─ doodle-01.png
-   ├─ doodle-02.png
-   └─ ...
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>랜덤 낙서 벌칙</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Pretendard, Apple SD Gothic Neo, Arial, sans-serif;
+      background: #f8f6ff;
+      overflow: hidden;
+    }
+
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("./images/background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .stage {
+      position: relative;
+      width: min(1180px, 94vw);
+      min-height: min(760px, 88vh);
+      padding: 54px 56px 44px;
+      border-radius: 36px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.22));
+      border: 2px solid rgba(255,255,255,0.7);
+      box-shadow: 0 30px 80px rgba(82, 62, 120, 0.25);
+      backdrop-filter: blur(4px);
+      overflow: hidden;
+    }
+
+    .stage::before,
+    .stage::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .stage::before {
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,0.9) 0 2px, transparent 3px),
+        radial-gradient(circle at 22% 9%, rgba(255,255,255,0.85) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 20%, rgba(255,255,255,0.9) 0 2px, transparent 3px),
+        radial-gradient(circle at 77% 68%, rgba(255,255,255,0.85) 0 2px, transparent 3px);
+    }
+
+    .stage::after {
+      right: 52px;
+      top: 48px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      box-shadow: -22px 12px 0 0 rgba(255,255,255,0.86);
+      transform: rotate(-18deg);
+    }
+
+    .title-wrap {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 4px 18px rgba(74, 56, 128, 0.45);
+      margin-bottom: 44px;
+    }
+
+    .title {
+      font-size: clamp(32px, 4vw, 58px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: clamp(15px, 1.7vw, 22px);
+      font-weight: 700;
+      opacity: 0.95;
+    }
+
+    .players {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: clamp(36px, 7vw, 90px);
+      align-items: start;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .label {
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight: 950;
+      color: #fff;
+      text-shadow:
+        -3px -3px 0 rgba(110, 85, 255, 0.9),
+        3px 3px 0 rgba(52, 161, 255, 0.75),
+        0 7px 18px rgba(0,0,0,0.18);
+    }
+
+    .polaroid {
+      position: relative;
+      width: min(330px, 36vw);
+      aspect-ratio: 0.78;
+      padding: 14px 14px 52px;
+      background: #fff;
+      box-shadow:
+        0 18px 42px rgba(57, 44, 92, 0.28),
+        inset 0 0 0 1px rgba(0,0,0,0.04);
+      transform: rotate(-1.5deg);
+    }
+
+    .player:nth-child(2) .polaroid {
+      transform: rotate(1.5deg);
+    }
+
+    .portrait-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f2f2f2;
+    }
+
+    .portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .doodle {
+      position: absolute;
+      width: 26%;
+      height: auto;
+      transform-origin: center;
+      user-select: none;
+      pointer-events: none;
+      animation: pop 0.18s ease-out;
+      filter: drop-shadow(0 3px 2px rgba(0,0,0,0.12));
+      z-index: 3;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.2) rotate(var(--rotate));
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.18) rotate(var(--rotate));
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(var(--rotate));
+        opacity: 1;
+      }
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .penalty-button {
+      cursor: pointer;
+      min-width: 210px;
+      border: 0;
+      border-radius: 16px;
+      padding: 16px 30px;
+      font-size: clamp(18px, 2vw, 25px);
+      font-weight: 950;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(70, 55, 130, 0.25);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .penalty-button.a {
+      background: linear-gradient(135deg, #0f7cff, #0050d9);
+    }
+
+    .penalty-button.b {
+      background: linear-gradient(135deg, #9b50ff, #6728de);
+    }
+
+    .penalty-button:hover {
+      transform: translateY(-3px) scale(1.03);
+      filter: brightness(1.06);
+    }
+
+    .penalty-button:active {
+      transform: scale(0.96);
+    }
+
+    .reset-area {
+      position: relative;
+      z-index: 2;
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .reset-button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 28px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      background: rgba(42, 42, 48, 0.78);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .deco {
+      position: absolute;
+      z-index: 1;
+      color: rgba(255,255,255,0.85);
+      font-weight: 900;
+      text-shadow: 0 4px 12px rgba(64, 50, 120, 0.22);
+      pointer-events: none;
+    }
+
+    .deco.star1 { left: 70px; top: 80px; font-size: 48px; }
+    .deco.star2 { right: 120px; bottom: 180px; font-size: 64px; }
+    .deco.cloud1 { left: 50px; bottom: 70px; font-size: 74px; opacity: 0.55; }
+    .deco.flower1 { right: 70px; top: 300px; font-size: 58px; opacity: 0.75; }
+
+    @media (max-width: 820px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .page {
+        min-height: 100vh;
+        height: auto;
+        padding: 20px;
+      }
+
+      .stage {
+        min-height: auto;
+        padding: 34px 18px 28px;
+      }
+
+      .players {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .polaroid {
+        width: min(330px, 76vw);
+      }
+
+      .reset-area {
+        margin-bottom: 10px;
+      }
+
+      .deco {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="stage">
+      <div class="deco star1">✧</div>
+      <div class="deco star2">☆</div>
+      <div class="deco cloud1">☁</div>
+      <div class="deco flower1">✿</div>
+
+      <div class="title-wrap">
+        <h1 class="title">✧ 랜덤 낙서 벌칙! ✧</h1>
+        <p class="subtitle">버튼을 눌러 랜덤 낙서를 추가해보세요!</p>
+      </div>
+
+      <div class="players">
+        <section class="player">
+          <div class="label">A 공간</div>
+          <div class="polaroid">
+            <div class="portrait-box" id="portraitA">
+              <img class="portrait" src="./images/portrait-a.png" alt="A 초상화" />
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="penalty-button a" onclick="addRandomDoodle('portraitA')">A 벌칙 뽑기</button>
+          </div>
+        </section>
+
+        <section class="player">
+          <div class="label">B 공간</div>
+          <div class="polaroid">
+            <div class="portrait-box" id="portraitB">
+              <img class="portrait" src="./images/portrait-b.png" alt="B 초상화" />
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="penalty-button b" onclick="addRandomDoodle('portraitB')">B 벌칙 뽑기</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="reset-area">
+        <button class="reset-button" onclick="clearDoodles('portraitA')">A 초기화</button>
+        <button class="reset-button" onclick="clearDoodles('portraitB')">B 초기화</button>
+        <button class="reset-button" onclick="clearAllDoodles()">↻ 모든 낙서 초기화</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const doodleImages = [
+      "./images/doodle-01.png",
+      "./images/doodle-02.png",
+      "./images/doodle-03.png",
+      "./images/doodle-04.png",
+      "./images/doodle-05.png",
+      "./images/doodle-06.png",
+      "./images/doodle-07.png",
+      "./images/doodle-08.png",
+      "./images/doodle-09.png",
+      "./images/doodle-10.png"
+    ];
+
+    function getRandomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function addRandomDoodle(targetId) {
+      const target = document.getElementById(targetId);
+      const doodle = document.createElement("img");
+
+      const randomImage = getRandomItem(doodleImages);
+      const randomLeft = randomBetween(2, 74);
+      const randomTop = randomBetween(2, 74);
+      const randomRotate = randomBetween(-30, 30);
+      const randomSize = randomBetween(17, 34);
+
+      doodle.src = randomImage;
+      doodle.alt = "랜덤 낙서";
+      doodle.className = "doodle";
+      doodle.style.left = `${randomLeft}%`;
+      doodle.style.top = `${randomTop}%`;
+      doodle.style.width = `${randomSize}%`;
+      doodle.style.setProperty("--rotate", `${randomRotate}deg`);
+      doodle.style.transform = `rotate(${randomRotate}deg)`;
+
+      target.appendChild(doodle);
+    }
+
+    function clearDoodles(targetId) {
+      const target = document.getElementById(targetId);
+      target.querySelectorAll(".doodle").forEach((doodle) => doodle.remove());
+    }
+
+    function clearAllDoodles() {
+      clearDoodles("portraitA");
+      clearDoodles("portraitB");
+    }
+  </script>
+</body>
+</html>
