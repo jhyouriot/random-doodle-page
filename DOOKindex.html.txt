@@ -1,9 +1,0 @@
-random-doodle-page/
-├─ index.html
-└─ images/
-   ├─ background.jpg
-   ├─ portrait-a.png
-   ├─ portrait-b.png
-   ├─ doodle-01.png
-   ├─ doodle-02.png
-   └─ ...
