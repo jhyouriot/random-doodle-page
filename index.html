@@ -34,8 +34,8 @@
 
     .stage {
       position: relative;
-      width: min(1180px, 94vw);
-      min-height: min(760px, 88vh);
+  width: min(1400px, 96vw);
+  min-height: min(900px, 92vh);
       padding: 54px 56px 44px;
       border-radius: 36px;
       background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.22));
@@ -277,7 +277,7 @@
       }
 
       .polaroid {
-        width: min(330px, 76vw);
+        width: min(430px, 76vw);
       }
 
       .reset-area {
@@ -312,7 +312,7 @@
             </div>
           </div>
           <div class="button-row">
-            <button class="penalty-button a" onclick="addRandomDoodle('portraitA')">A 벌칙 뽑기</button>
+            <button class="penalty-button a" onclick="addRandomDoodle('portraitA')">독희 벌칙</button>
           </div>
         </section>
 
@@ -324,14 +324,14 @@
             </div>
           </div>
           <div class="button-row">
-            <button class="penalty-button b" onclick="addRandomDoodle('portraitB')">B 벌칙 뽑기</button>
+            <button class="penalty-button b" onclick="addRandomDoodle('portraitB')">레느 벌칙</button>
           </div>
         </section>
       </div>
 
       <div class="reset-area">
-        <button class="reset-button" onclick="clearDoodles('portraitA')">A 초기화</button>
-        <button class="reset-button" onclick="clearDoodles('portraitB')">B 초기화</button>
+        <button class="reset-button" onclick="clearDoodles('portraitA')">독희 초기화</button>
+        <button class="reset-button" onclick="clearDoodles('portraitB')">레느 초기화</button>
         <button class="reset-button" onclick="clearAllDoodles()">↻ 모든 낙서 초기화</button>
       </div>
     </section>
