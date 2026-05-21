@@ -426,8 +426,9 @@ function placeSticker(event, targetId) {
 if (targetId === "portraitB") {
   stickerHistoryB.push(sticker);
 }
+}
 
-    function undoLastSticker(targetId) {
+function undoLastSticker(targetId) {
   if (targetId === "portraitA") {
     const lastSticker = stickerHistoryA.pop();
     if (lastSticker) lastSticker.remove();
