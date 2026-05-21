@@ -203,67 +203,7 @@
         opacity: 1;
       }
     }
-#hammer {
-  position: fixed;
-  width: 180px;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0;
-  transform: translate(-50%, -50%) rotate(-40deg) scale(0.4);
-  transition: transform 0.18s ease-out, opacity 0.12s;
-}
 
-#hammer.active {
-  opacity: 1;
-}
-
-.hit-shake {
-  animation: hitShake 0.28s;
-}
-
-@keyframes hitShake {
-  0% { transform: translate(0px, 0px) rotate(0deg); }
-  20% { transform: translate(-8px, 3px) rotate(-2deg); }
-  40% { transform: translate(7px, -2px) rotate(2deg); }
-  60% { transform: translate(-6px, 2px) rotate(-1deg); }
-  80% { transform: translate(4px, -1px) rotate(1deg); }
-  100% { transform: translate(0px, 0px) rotate(0deg); }
-}
-    .button-row {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .penalty-button {
-      cursor: pointer;
-      min-width: 210px;
-      border: 0;
-      border-radius: 16px;
-      padding: 16px 30px;
-      font-size: clamp(18px, 2vw, 25px);
-      font-weight: 950;
-      color: #fff;
-      box-shadow: 0 12px 24px rgba(70, 55, 130, 0.25);
-      transition: transform 0.15s ease, filter 0.15s ease;
-    }
-
-    .penalty-button.a {
-      background: linear-gradient(135deg, #0f7cff, #0050d9);
-    }
-
-    .penalty-button.b {
-      background: linear-gradient(135deg, #9b50ff, #6728de);
-    }
-
-    .penalty-button:hover {
-      transform: translateY(-3px) scale(1.03);
-      filter: brightness(1.06);
-    }
-
-    .penalty-button:active {
-      transform: scale(0.96);
-    }
 
     .reset-area {
       position: relative;
@@ -358,7 +298,7 @@
               <img class="portrait" src="./images/portrait-a.png" alt="A 초상화" />
             </div>
           </div>
-         <div class="sticker-palette">
+       <div class="sticker-palette">
   <img src="./images/doodle-01.png" onclick="selectSticker(event, './images/doodle-01.png')">
   <img src="./images/doodle-02.png" onclick="selectSticker(event, './images/doodle-02.png')">
   <img src="./images/doodle-03.png" onclick="selectSticker(event, './images/doodle-03.png')">
@@ -369,7 +309,7 @@
   <img src="./images/doodle-08.png" onclick="selectSticker(event, './images/doodle-08.png')">
   <img src="./images/doodle-09.png" onclick="selectSticker(event, './images/doodle-09.png')">
   <img src="./images/doodle-10.png" onclick="selectSticker(event, './images/doodle-10.png')">
-          </div>
+</div>
          
         </section>
 
@@ -391,7 +331,7 @@
   <img src="./images/doodle-08.png" onclick="selectSticker(event, './images/doodle-08.png')">
   <img src="./images/doodle-09.png" onclick="selectSticker(event, './images/doodle-09.png')">
   <img src="./images/doodle-10.png" onclick="selectSticker(event, './images/doodle-10.png')">
-          </div>
+</div>
         </section>
       </div>
 
@@ -402,7 +342,7 @@
       </div>
     </section>
   </main>
- <img id="hammer" src="./images/hammer.png" alt="뿅망치" />
+
   <script>
     const doodleImages = [
       "./images/doodle-01.png",
