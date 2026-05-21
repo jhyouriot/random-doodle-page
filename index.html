@@ -335,11 +335,12 @@
         </section>
       </div>
 
-      <div class="reset-area">
-        <button class="reset-button" onclick="clearDoodles('portraitA')">독희 초기화</button>
-        <button class="reset-button" onclick="clearDoodles('portraitB')">레느 초기화</button>
-        <button class="reset-button" onclick="clearAllDoodles()">↻ 모든 낙서 초기화</button>
-      </div>
+     <div class="reset-area">
+  <button class="reset-button" onclick="undoLastSticker()">↩ 낙서 하나 되돌리기</button>
+  <button class="reset-button" onclick="clearDoodles('portraitA')">독희 초기화</button>
+  <button class="reset-button" onclick="clearDoodles('portraitB')">레느 초기화</button>
+  <button class="reset-button" onclick="clearAllDoodles()">↻ 모든 낙서 초기화</button>
+</div>
     </section>
   </main>
 
@@ -366,6 +367,7 @@
     }
 
 let selectedSticker = null;
+    let stickerHistory = [];
 
 function selectSticker(event, stickerSrc) {
   selectedSticker = stickerSrc;
@@ -399,8 +401,16 @@ function placeSticker(event, targetId) {
   sticker.style.transform = `rotate(${randomBetween(-18, 18)}deg)`;
 
   target.appendChild(sticker);
+  stickerHistory.push(sticker);
 }
- 
+    
+ function undoLastSticker() {
+  const lastSticker = stickerHistory.pop();
+
+  if (lastSticker) {
+    lastSticker.remove();
+  }
+}
     function clearDoodles(targetId) {
       const target = document.getElementById(targetId);
       target.querySelectorAll(".doodle").forEach((doodle) => doodle.remove());
@@ -409,6 +419,7 @@ function placeSticker(event, targetId) {
     function clearAllDoodles() {
       clearDoodles("portraitA");
       clearDoodles("portraitB");
+      stickerHistory = [];
     }
     
   </script>
