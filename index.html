@@ -336,7 +336,8 @@
       </div>
 
      <div class="reset-area">
-  <button class="reset-button" onclick="undoLastSticker()">↩ 낙서 하나 되돌리기</button>
+<button class="reset-button" onclick="undoLastSticker('portraitA')">↩ 독희 낙서 하나 되돌리기</button>
+<button class="reset-button" onclick="undoLastSticker('portraitB')">↩ 레느 낙서 하나 되돌리기</button>
   <button class="reset-button" onclick="clearDoodles('portraitA')">독희 초기화</button>
   <button class="reset-button" onclick="clearDoodles('portraitB')">레느 초기화</button>
   <button class="reset-button" onclick="clearAllDoodles()">↻ 모든 낙서 초기화</button>
@@ -368,6 +369,8 @@
 
 let selectedSticker = null;
     let stickerHistory = [];
+    let stickerHistoryA = [];
+    let stickerHistoryB = [];
 
 function selectSticker(event, stickerSrc) {
   selectedSticker = stickerSrc;
@@ -401,6 +404,13 @@ function placeSticker(event, targetId) {
   sticker.style.transform = `rotate(${randomBetween(-18, 18)}deg)`;
 
   target.appendChild(sticker);
+  if (targetId === "portraitA") {
+  stickerHistoryA.push(sticker);
+}
+
+if (targetId === "portraitB") {
+  stickerHistoryB.push(sticker);
+}
   stickerHistory.push(sticker);
 }
     
@@ -409,6 +419,17 @@ function placeSticker(event, targetId) {
 
   if (lastSticker) {
     lastSticker.remove();
+  }
+}
+    function undoLastSticker(targetId) {
+  if (targetId === "portraitA") {
+    const lastSticker = stickerHistoryA.pop();
+    if (lastSticker) lastSticker.remove();
+  }
+
+  if (targetId === "portraitB") {
+    const lastSticker = stickerHistoryB.pop();
+    if (lastSticker) lastSticker.remove();
   }
 }
     function clearDoodles(targetId) {
