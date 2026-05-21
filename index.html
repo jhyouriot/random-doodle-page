@@ -460,65 +460,7 @@ function placeSticker(event, targetId) {
 
   target.appendChild(sticker);
 }
-  const hammer = document.getElementById("hammer");
-
-  const rect = target.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-
-  hammer.style.left = `${centerX + 160}px`;
-  hammer.style.top = `${centerY - 160}px`;
-
-  hammer.classList.add("active");
-
-  hammer.style.transform =
-    `translate(-50%, -50%) rotate(-45deg) scale(0.5)`;
-
-  await wait(50);
-
-  hammer.style.transform =
-    `translate(-50%, -50%) rotate(18deg) scale(1.1)`;
-
-  target.classList.add("hit-shake");
-
-  setTimeout(() => {
-    target.classList.remove("hit-shake");
-  }, 300);
-
-  createDoodle(target);
-
-  setTimeout(() => {
-    hammer.classList.remove("active");
-  }, 220);
-}
-
-function createDoodle(target) {
-  const doodle = document.createElement("img");
-
-  const randomImage = getRandomItem(doodleImages);
-  const randomLeft = randomBetween(2, 74);
-  const randomTop = randomBetween(2, 74);
-  const randomRotate = randomBetween(-30, 30);
-  const randomSize = randomBetween(17, 34);
-
-  doodle.src = randomImage;
-  doodle.alt = "랜덤 낙서";
-  doodle.className = "doodle";
-
-  doodle.style.left = `${randomLeft}%`;
-  doodle.style.top = `${randomTop}%`;
-  doodle.style.width = `${randomSize}%`;
-
-  doodle.style.setProperty("--rotate", `${randomRotate}deg`);
-  doodle.style.transform = `rotate(${randomRotate}deg)`;
-
-  target.appendChild(doodle);
-}
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
+ 
     function clearDoodles(targetId) {
       const target = document.getElementById(targetId);
       target.querySelectorAll(".doodle").forEach((doodle) => doodle.remove());
