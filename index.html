@@ -368,7 +368,6 @@
     }
 
 let selectedSticker = null;
-    let stickerHistory = [];
     let stickerHistoryA = [];
     let stickerHistoryB = [];
 
@@ -411,16 +410,7 @@ function placeSticker(event, targetId) {
 if (targetId === "portraitB") {
   stickerHistoryB.push(sticker);
 }
-  stickerHistory.push(sticker);
-}
-    
- function undoLastSticker() {
-  const lastSticker = stickerHistory.pop();
 
-  if (lastSticker) {
-    lastSticker.remove();
-  }
-}
     function undoLastSticker(targetId) {
   if (targetId === "portraitA") {
     const lastSticker = stickerHistoryA.pop();
@@ -440,7 +430,8 @@ if (targetId === "portraitB") {
     function clearAllDoodles() {
       clearDoodles("portraitA");
       clearDoodles("portraitB");
-      stickerHistory = [];
+stickerHistoryA = [];
+stickerHistoryB = [];
     }
     
   </script>
