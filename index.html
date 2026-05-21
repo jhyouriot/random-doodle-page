@@ -166,7 +166,29 @@
       filter: drop-shadow(0 3px 2px rgba(0,0,0,0.12));
       z-index: 3;
     }
+    
+.sticker-palette {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 420px;
+}
 
+.sticker-palette img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.sticker-palette img.selected {
+  outline: 4px solid #ff4fa3;
+}
     @keyframes pop {
       0% {
         transform: scale(0.2) rotate(var(--rotate));
@@ -332,12 +354,21 @@
         <section class="player">
           <div class="label">금독희♥</div>
           <div class="polaroid">
-            <div class="portrait-box" id="portraitA">
+            <div class="portrait-box" id="portraitA" onclick="placeSticker(event, 'portraitA')">
               <img class="portrait" src="./images/portrait-a.png" alt="A 초상화" />
             </div>
           </div>
-          <div class="button-row">
-            <button class="penalty-button a" onclick="addRandomDoodle('portraitA')">독희 벌칙</button>
+         <div class="sticker-palette">
+  <img src="./images/doodle-01.png" onclick="selectSticker(event, './images/doodle-01.png')">
+  <img src="./images/doodle-02.png" onclick="selectSticker(event, './images/doodle-02.png')">
+  <img src="./images/doodle-03.png" onclick="selectSticker(event, './images/doodle-03.png')">
+  <img src="./images/doodle-04.png" onclick="selectSticker(event, './images/doodle-04.png')">
+  <img src="./images/doodle-05.png" onclick="selectSticker(event, './images/doodle-05.png')">
+  <img src="./images/doodle-06.png" onclick="selectSticker(event, './images/doodle-06.png')">
+  <img src="./images/doodle-07.png" onclick="selectSticker(event, './images/doodle-07.png')">
+  <img src="./images/doodle-08.png" onclick="selectSticker(event, './images/doodle-08.png')">
+  <img src="./images/doodle-09.png" onclick="selectSticker(event, './images/doodle-09.png')">
+  <img src="./images/doodle-10.png" onclick="selectSticker(event, './images/doodle-10.png')">
           </div>
          
         </section>
@@ -345,12 +376,21 @@
         <section class="player">
           <div class="label">해레느♥</div>
           <div class="polaroid">
-            <div class="portrait-box" id="portraitB">
+            <div class="portrait-box" id="portraitB" onclick="placeSticker(event, 'portraitB')">
               <img class="portrait" src="./images/portrait-b.png" alt="B 초상화" />
             </div>
           </div>
-          <div class="button-row">
-            <button class="penalty-button b" onclick="addRandomDoodle('portraitB')">레느 벌칙</button>
+<div class="sticker-palette">
+  <img src="./images/doodle-01.png" onclick="selectSticker(event, './images/doodle-01.png')">
+  <img src="./images/doodle-02.png" onclick="selectSticker(event, './images/doodle-02.png')">
+  <img src="./images/doodle-03.png" onclick="selectSticker(event, './images/doodle-03.png')">
+  <img src="./images/doodle-04.png" onclick="selectSticker(event, './images/doodle-04.png')">
+  <img src="./images/doodle-05.png" onclick="selectSticker(event, './images/doodle-05.png')">
+  <img src="./images/doodle-06.png" onclick="selectSticker(event, './images/doodle-06.png')">
+  <img src="./images/doodle-07.png" onclick="selectSticker(event, './images/doodle-07.png')">
+  <img src="./images/doodle-08.png" onclick="selectSticker(event, './images/doodle-08.png')">
+  <img src="./images/doodle-09.png" onclick="selectSticker(event, './images/doodle-09.png')">
+  <img src="./images/doodle-10.png" onclick="selectSticker(event, './images/doodle-10.png')">
           </div>
         </section>
       </div>
@@ -385,8 +425,41 @@
       return Math.random() * (max - min) + min;
     }
 
-  async function addRandomDoodle(targetId) {
+let selectedSticker = null;
+
+function selectSticker(event, stickerSrc) {
+  selectedSticker = stickerSrc;
+
+  document.querySelectorAll(".sticker-palette img").forEach(img => {
+    img.classList.remove("selected");
+  });
+
+  event.target.classList.add("selected");
+}
+
+function placeSticker(event, targetId) {
+  if (!selectedSticker) {
+    alert("먼저 붙일 낙서를 선택해주세요!");
+    return;
+  }
+
   const target = document.getElementById(targetId);
+  const rect = target.getBoundingClientRect();
+
+  const x = ((event.clientX - rect.left) / rect.width) * 100;
+  const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+  const sticker = document.createElement("img");
+  sticker.src = selectedSticker;
+  sticker.className = "doodle";
+
+  sticker.style.left = `${x - 12}%`;
+  sticker.style.top = `${y - 12}%`;
+  sticker.style.width = "24%";
+  sticker.style.transform = `rotate(${randomBetween(-18, 18)}deg)`;
+
+  target.appendChild(sticker);
+}
   const hammer = document.getElementById("hammer");
 
   const rect = target.getBoundingClientRect();
